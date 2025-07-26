@@ -82,20 +82,28 @@ The service supports 40+ languages including major world languages (English, Spa
 
 ## Deployment Strategy
 
-### Environment Configuration
+### Vercel Configuration (Primary)
+- **Serverless Functions**: Configured with `vercel.json` for automatic deployment
+- **API Structure**: Main app exported via `/api/index.js` entry point
+- **Function Timeout**: 30-second maximum duration for TTS requests
+- **Auto-scaling**: Vercel handles scaling based on request volume
+- **Environment**: Production-ready with sanitized error responses
+
+### Local Development
 - **Development**: Full error details and stack traces
-- **Production**: Sanitized error responses for security
-- **Port/Host**: Configurable via environment variables (PORT, defaults to 8000)
+- **Port/Host**: Configurable via environment variables (PORT, defaults to 5000)
+- **Direct Execution**: `npm start` runs Express server traditionally
 
 ### Runtime Requirements
-- **Node.js**: Version 18+ (required by Express 5.x and body-parser)
+- **Node.js**: Version 18+ (specified in engines for Vercel)
+- **Express**: Version 4.x for stability and Vercel compatibility
 - **No Database**: Stateless design eliminates database setup complexity
 - **Minimal Dependencies**: Only 3 core dependencies for lightweight deployment
 
 ### Scalability Considerations
-- **Stateless Design**: Multiple instances can run without coordination
+- **Stateless Design**: Multiple serverless instances run without coordination
 - **No Session Management**: Eliminates sticky session requirements
-- **Simple Health Check**: `/health` endpoint for load balancer health checks
-- **CORS Configuration**: Ready for deployment behind CDN or reverse proxy
+- **Simple Health Check**: `/health` endpoint for monitoring
+- **CORS Configuration**: Ready for frontend integration from any domain
 
-The application is designed for easy deployment on platforms like Replit, Heroku, or any Node.js hosting environment with minimal configuration requirements.
+The application is optimized for Vercel's serverless platform while maintaining compatibility with traditional Node.js hosting environments.

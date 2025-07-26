@@ -39,21 +39,26 @@ app.use('*', (req, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, HOST, () => {
-    console.log(`🎤 Speak Proxy Server running on http://${HOST}:${PORT}`);
-    console.log(`📡 Available endpoints:`);
-    console.log(`   GET  /health - Health check`);
-    console.log(`   GET  /speak  - Text-to-Speech proxy`);
-});
+// Export app for Vercel
+module.exports = app;
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-    console.log('🛑 SIGTERM received, shutting down gracefully');
-    process.exit(0);
-});
+// Only start server if running directly (not in serverless environment)
+if (require.main === module) {
+    app.listen(PORT, HOST, () => {
+        console.log(`🎤 Speak Proxy Server running on http://${HOST}:${PORT}`);
+        console.log(`📡 Available endpoints:`);
+        console.log(`   GET  /health - Health check`);
+        console.log(`   GET  /speak  - Text-to-Speech proxy`);
+    });
 
-process.on('SIGINT', () => {
-    console.log('🛑 SIGINT received, shutting down gracefully');
-    process.exit(0);
-});
+    // Graceful shutdown
+    process.on('SIGTERM', () => {
+        console.log('🛑 SIGTERM received, shutting down gracefully');
+        process.exit(0);
+    });
+
+    process.on('SIGINT', () => {
+        console.log('🛑 SIGINT received, shutting down gracefully');
+        process.exit(0);
+    });
+}
